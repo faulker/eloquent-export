@@ -1,0 +1,34 @@
+{
+  "name": "faulker/eloquent-export",
+  "description": "A CLI tool for exporting and importing database data using Laravel's Eloquent models",
+  "keywords": [
+    "Eloquent",
+    "Laravel",
+    "database",
+    "export",
+    "import",
+    "backup",
+    "restore"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/faulker/eloquent-export",
+  "authors": [
+    {
+      "name": "Winter Faulk",
+      "email": "winter@faulk.me",
+      "homepage": "http://faulk.me",
+      "role": "Developer"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Faulker\\EloquentExport\\": "src/"
+    }
+  },
+  "require": {
+    "illuminate/console": "~5",
+    "illuminate/database": "~5",
+    "illuminate/config": "~5",
+    "nesbot/carbon": "~1.18"
+  }
+}
