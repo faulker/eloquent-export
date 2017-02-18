@@ -22,7 +22,8 @@ class EloquentExportCommand extends Command
     protected $bar;
     protected $profile;
     protected $ignore;
-    protected $pivot = [];
+    protected $pivot   = [];
+    protected $runLast = [];
 
     /**
      * The name and signature of the console command.
@@ -67,6 +68,12 @@ class EloquentExportCommand extends Command
 
             // Insert/Update the data in the database
             $this->buildRows($this->profile['model'], $this->data);
+
+            if (! empty($this->runLast)) {
+                foreach ($this->runLast as $data) {
+                    $this->buildRows($data['model'], $data['row']);
+                }
+            }
 
             // Handle pivots
             if (! empty($this->pivot)) {
@@ -220,15 +227,35 @@ class EloquentExportCommand extends Command
                 } elseif (! $this->notRelation($model, $key)) {
                     $this->buildRows($model, $value);
                 }
+
+                $method = 'set'.ucfirst($key).'Attribute';
+                if (method_exists($model, $method)) {
+                    $model->$method($value);
+                    $row[$key] = $model->getAttributes()[$key];
+                }
             }
 
-            if ($existing === false) {
-                DB::table($table)
-                  ->insert($row);
-            } else {
-                DB::table($table)
-                  ->where($primaryKey, $row[$primaryKey])
-                  ->update($row);
+            try {
+                if ($existing === false) {
+                    DB::table($table)
+                      ->insert($row);
+                } else {
+                    DB::table($table)
+                      ->where($primaryKey, $row[$primaryKey])
+                      ->update($row);
+                }
+            }
+            catch (\Exception $e) {
+                switch ($e->getCode()) {
+                    case '23503':
+                        $this->runLast[] = [
+                            'model' => $model,
+                            'row'   => $row
+                        ];
+                        break;
+                    default:
+                        die($e);
+                }
             }
         }
 
