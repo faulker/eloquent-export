@@ -349,7 +349,7 @@ class EloquentExportCommand extends Command
             $dirArray  = $this->arrayRemoveEnd($pathArray);
             $dir       = implode('/', $dirArray);
             if (! file_exists($dir)) {
-                mkdir($dir);
+                mkdir($dir, 0777, true);
             }
         } elseif (strpos($file, '\\') !== false) {
             $pathArray = explode('\\', $file);
