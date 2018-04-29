@@ -1,9 +1,9 @@
 # Laravel Eloquent Export Tool
-A tool for creating profiles that use the Laravel Eloquent Models and giving you the ability to export/import data from/to a database using those profiles.
+Give the ability to build profiles/configurations to be used by a artisan command to export data from the database using Eloquent models.
 
 ---
 
-**This has only been tested on Laravel 5.1 but it should work on high versions**
+**This has only been tested on Laravel 5.1 but it should work on higher versions**
 
 ---
 
